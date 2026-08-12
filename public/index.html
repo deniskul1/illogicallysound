@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Illogically Sound</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Illogically Sound</h1>
+    <div class="topbar-right">
+      <div class="score-badge">
+        <span class="score-label">Points</span>
+        <span id="roundPoints">–</span>
+      </div>
+      <button id="settingsBtn" class="icon-btn" title="Settings">⚙</button>
+      <button id="referenceBtn" class="icon-btn" title="Fallacy reference">📖</button>
+      <button id="helpBtn" class="icon-btn" title="How to play">?</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="card scenario-card">
+      <div id="scenarioEmpty" class="scenario-empty">
+        <p>Set your API key, then get a topic to respond to.</p>
+        <button id="newRoundBtn" class="primary-btn">Get a topic</button>
+      </div>
+      <div id="scenarioContent" class="hidden">
+        <p class="topic-label" id="topicLabel"></p>
+        <p class="question" id="questionText"></p>
+        <button id="newRoundBtn2" class="ghost-btn">New topic</button>
+      </div>
+    </section>
+
+    <section class="card response-card hidden" id="responseCard">
+      <label for="responseInput">Your argument: pack in as many fallacies as you can</label>
+      <textarea id="responseInput" rows="5" placeholder="Start typing…"></textarea>
+      <div class="response-footer">
+        <span id="wordCount">0 / 300 characters</span>
+        <button id="submitBtn" class="primary-btn" disabled>Submit argument</button>
+      </div>
+    </section>
+
+    <section class="card results-card hidden" id="resultsCard">
+      <h2>Results</h2>
+      <p id="commentary" class="commentary"></p>
+      <p class="round-score">Fallacies found: <span id="fallacyCount">0</span> · Points earned: <span id="roundScore">0</span></p>
+      <ul id="fallacyList" class="fallacy-list"></ul>
+      <button id="playAgainBtn" class="primary-btn">Next topic</button>
+    </section>
+
+    <div id="loadingIndicator" class="loading hidden">
+      <div class="spinner"></div>
+      <span id="loadingText">Thinking…</span>
+    </div>
+
+    <div id="errorBanner" class="error-banner hidden"></div>
+  </main>
+
+  <!-- Settings modal -->
+  <div id="settingsModal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2>Settings</h2>
+      <p class="modal-hint">Bring your own API key. It's stored only in your browser (localStorage) and sent to your own local server, which forwards it straight to your chosen provider, never to us.</p>
+      <label for="providerSelect">Provider</label>
+      <select id="providerSelect">
+        <option value="gemini">Google Gemini</option>
+        <option value="openai">OpenAI</option>
+        <option value="anthropic">Anthropic</option>
+      </select>
+      <label for="apiKeyInput">API key</label>
+      <input id="apiKeyInput" type="password" placeholder="Paste your API key" autocomplete="off" />
+      <label for="modelSelect">Model</label>
+      <select id="modelSelect" disabled>
+        <option value="">Enter your API key above…</option>
+      </select>
+      <p id="modelStatus" class="modal-hint"></p>
+      <div class="modal-actions">
+        <button id="saveSettingsBtn" class="primary-btn">Save</button>
+        <button id="closeSettingsBtn" class="ghost-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- How to play modal -->
+  <div id="helpModal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2>How to play</h2>
+      <div class="help-section">
+        <h3>The game</h3>
+        <p>Get a topic and you'll be given a short scenario with a specific person or group proposing something, plus a yes/no question about it. Write an argument responding to that question in 300 characters or fewer, packing in as many logical fallacies as you can while still technically addressing the question.</p>
+      </div>
+      <div class="help-section">
+        <h3>Grading</h3>
+        <p>When you submit, the AI checks your argument against the full canonical list of fallacies (see the reference book icon) and reports every instance it finds, with a quote and explanation for each.</p>
+        <p>A few rules it grades strictly by:</p>
+        <ul class="help-list">
+          <li>Your argument has to actually engage with the scenario. A random, unrelated insult with no logical connection to the question doesn't count as a fallacy, it just scores zero.</li>
+          <li>A fallacy like ad hominem only counts if it targets the actual proposer named in the scenario (or a stated supporter), not some unrelated made up person.</li>
+          <li>Each distinct fallacy found is worth 10 points. Repeating the same fallacy twice only counts once.</li>
+        </ul>
+      </div>
+      <div class="help-section">
+        <h3>Scoring</h3>
+        <p>The points shown are for your current argument only. They reset with every new topic and don't add up across rounds.</p>
+      </div>
+      <div class="modal-actions">
+        <button id="closeHelpBtn" class="primary-btn">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fallacy reference drawer -->
+  <div id="referenceDrawer" class="drawer hidden">
+    <div class="drawer-header">
+      <h2>Fallacy reference</h2>
+      <button id="closeReferenceBtn" class="icon-btn">✕</button>
+    </div>
+    <input id="referenceSearch" type="text" placeholder="Search fallacies…" />
+    <div id="referenceList" class="reference-list"></div>
+  </div>
+  <div id="drawerOverlay" class="drawer-overlay hidden"></div>
+
+  <footer class="site-footer">
+    Made by <a href="https://www.linkedin.com/in/deniskul/" target="_blank" rel="noopener noreferrer">Denis Kul</a>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
